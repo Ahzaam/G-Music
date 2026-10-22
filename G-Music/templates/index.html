@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>G-Music</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app">
+        <!-- ===== TOP NAV ===== -->
+        <header class="topnav">
+            <div class="logo">
+                <i class="fas fa-wave-square"></i>
+                <span>G-Music</span>
+            </div>
+
+            <nav class="primary-nav">
+                <button class="nav-tab active" id="navLibrary"><i class="fas fa-layer-group"></i> Library</button>
+                <button class="nav-tab" id="navArtists"><i class="fas fa-microphone-lines"></i> Artists</button>
+                <button class="nav-tab" id="navAlbums"><i class="fas fa-record-vinyl"></i> Albums</button>
+                <button class="nav-tab" id="navPlaylists"><i class="fas fa-list-ul"></i> Playlists</button>
+                <button class="nav-tab" id="navFavorites"><i class="fas fa-heart"></i> Favorites</button>
+            </nav>
+
+            <div class="nav-actions">
+                <div class="search-mini">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Search...">
+                    <button id="clearSearchBtn" class="clear-mini">×</button>
+                </div>
+                <button id="selectFolderBtn" class="icon-action" title="Add folder"><i class="fas fa-folder-plus"></i></button>
+                <button id="selectFilesBtn" class="icon-action" title="Add files"><i class="fas fa-file-audio"></i></button>
+                <input type="file" id="folderInput" webkitdirectory directory multiple style="display:none">
+                <input type="file" id="filesInput" multiple accept="audio/*" style="display:none">
+            </div>
+        </header>
+
+        <!-- ===== BODY: content + right panel ===== -->
+        <div class="body-grid">
+            <main class="content-area">
+                <div class="content-head">
+                    <h2 id="viewTitle">All Songs</h2>
+                    <span class="pill" id="songCount">0 songs</span>
+                </div>
+                <section class="content" id="content"></section>
+            </main>
+
+            <aside class="right-panel">
+                <div class="panel-tabs">
+                    <button class="panel-tab active" data-panel="playlists">Playlists</button>
+                    <button class="panel-tab" data-panel="queue">Queue</button>
+                </div>
+
+                <div class="panel-pane active" id="pane-playlists">
+                    <button id="createPlaylistBtn" class="new-playlist-btn">
+                        <i class="fas fa-plus"></i> New Playlist
+                    </button>
+                    <div class="playlist-list" id="playlistsList"></div>
+                </div>
+
+                <div class="panel-pane" id="pane-queue">
+                    <div class="queue-empty">
+                        <i class="fas fa-list"></i>
+                        <p>Queue is empty</p>
+                        <small>Play a playlist to see upcoming tracks</small>
+                    </div>
+                </div>
+
+                <div class="folder-path" id="selectedFolder">
+                    <i class="fas fa-folder"></i><span>No folder selected</span>
+                </div>
+            </aside>
+        </div>
+
+        <!-- ===== WIDE PLAYER ===== -->
+        <footer class="player-band">
+            <div class="np-compact">
+                <div class="np-art"><i class="fas fa-music"></i></div>
+                <div class="np-meta">
+                    <div class="np-title" id="nowPlayingTitle">Nothing playing</div>
+                    <div class="np-artist" id="nowPlayingArtist">Pick a song</div>
+                </div>
+                <button id="favoriteCurrentBtn" class="icon-btn"><i class="far fa-heart"></i></button>
+            </div>
+
+            <div class="transport">
+                <button id="shuffleBtn" class="ctrl"><i class="fas fa-shuffle"></i></button>
+                <button id="prevBtn" class="ctrl"><i class="fas fa-backward-step"></i></button>
+                <button id="playPauseBtn" class="ctrl play"><i class="fas fa-play"></i></button>
+                <button id="nextBtn" class="ctrl"><i class="fas fa-forward-step"></i></button>
+                <button id="repeatBtn" class="ctrl"><i class="fas fa-repeat"></i></button>
+            </div>
+
+            <div class="progress-wide">
+                <span class="time" id="currentTime">0:00</span>
+                <div class="progress-bar" id="progressBar"><div class="progress-fill" id="progressFill"></div></div>
+                <span class="time" id="totalTime">0:00</span>
+                <div class="volume-inline">
+                    <i class="fas fa-volume-high" id="volumeIcon"></i>
+                    <div class="volume-bar" id="volumeBar"><div class="volume-fill" id="volumeFill" style="width:70%"></div></div>
+                </div>
+            </div>
+
+            <audio id="audioPlayer"></audio>
+            <div class="waveform" id="waveformContainer"></div>
+        </footer>
+    </div>
+
+    <div class="modal" id="createPlaylistModal">
+        <div class="modal-card">
+            <div class="modal-head"><h3>New Playlist</h3><button class="close-modal">&times;</button></div>
+            <div class="modal-body">
+                <input type="text" id="playlistNameInput" placeholder="Playlist name">
+                <textarea id="playlistDescInput" placeholder="Description (optional)"></textarea>
+            </div>
+            <div class="modal-foot">
+                <button class="btn-ghost" id="cancelPlaylistBtn">Cancel</button>
+                <button class="btn-primary" id="savePlaylistBtn">Create</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="addToPlaylistModal">
+        <div class="modal-card">
+            <div class="modal-head"><h3>Add to Playlist</h3><button class="close-modal">&times;</button></div>
+            <div class="modal-body" id="playlistOptions"></div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/player.js') }}"></script>
+</body>
+</html>
